@@ -63,7 +63,7 @@
   </xacro:macro>
 
 
-  <xacro:macro name="ur10_robot" params="prefix joint_limited
+  <xacro:macro name="ur10_robot" params="prefix joint_limited hardware_interface
 		 shoulder_pan_lower_limit:=${-pi}    shoulder_pan_upper_limit:=${pi}
 		 shoulder_lift_lower_limit:=${-pi}    shoulder_lift_upper_limit:=${pi}
 		 elbow_joint_lower_limit:=${-pi}    elbow_joint_upper_limit:=${pi}
@@ -303,7 +303,7 @@
       </collision>
     </link>
 
-    <xacro:ur_arm_transmission prefix="${prefix}" />
+    <xacro:ur_arm_transmission prefix="${prefix}" hardware_interface="${hardware_interface}" />
     <xacro:ur_arm_gazebo prefix="${prefix}" />
 
     <!-- ROS base_link to UR 'Base' Coordinates transform -->

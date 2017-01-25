@@ -2,7 +2,7 @@
 <launch>
   <arg name="limited" default="false"/>
   <arg name="paused" default="false"/>
-  <arg name="gui" default="true"/>
+  <arg name="gui" default="false"/>
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -10,6 +10,12 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
+
+  <node name="rviz" 
+        pkg="rviz" 
+        type="rviz" 
+        args="-d $(find ur_description)/launch/ur10.rviz" 
+        unless="$(arg gui)" />
 
   <!-- send robot urdf to param server -->
   <include file="$(find ur_description)/launch/ur10_upload.launch">
@@ -21,7 +27,7 @@
 
   <include file="$(find ur_gazebo)/launch/controller_utils.launch"/>
 
-  <rosparam file="$(find ur_gazebo)/controller/arm_controller_ur10.yaml" command="load"/>
-  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/>
+  <!--rosparam file="$(find ur_gazebo)/controller/arm_controller_ur10.yaml" command="load"/>
+  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/-->
 
 </launch>
