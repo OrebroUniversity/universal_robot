@@ -2,7 +2,7 @@
 <launch>
   <arg name="limited" default="false"/>
   <arg name="paused" default="false"/>
-  <arg name="gui" default="false"/>
+  <arg name="gui" default="true"/>
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -14,7 +14,7 @@
   <node name="rviz" 
         pkg="rviz" 
         type="rviz" 
-        args="-d $(find ur_description)/launch/ur10.rviz" 
+        args="-d $(find ur_description)/launch/ur10_impedance.rviz" 
         unless="$(arg gui)" />
 
   <!-- send robot urdf to param server -->
