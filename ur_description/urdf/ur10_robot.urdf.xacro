@@ -11,14 +11,21 @@
   <!-- arm -->
   <xacro:ur10_robot prefix="" joint_limited="false" hardware_interface="EffortJointInterface" />
 
-  <xacro:include filename="$(find ur_description)/urdf/feed.urdf.xacro" />
+  <!--xacro:include filename="$(find ur_description)/urdf/feed.urdf.xacro" /-->
 
   <link name="world" />
+  <link name="base_link" />
 
   <joint name="world_joint" type="fixed">
     <parent link="world" />
     <child link = "base_link" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link" />
+    <child link = "pedistal_link" />
+    <origin xyz="0.0 0.0 0.45" rpy="0.0 0.0 0.0" />
   </joint>
 
 </robot>

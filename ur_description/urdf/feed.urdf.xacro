@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="feeds" xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <link name="world" />
+  <link name="base_link" />
+  <joint name="world_base_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
 
   <link name="link_feed1">
     <visual>
@@ -28,7 +35,7 @@
   </link>
 
   <joint name="joint_feed1_to_base_link" type="fixed">
-    <parent link="world"/>
+    <parent link="base_link"/>
     <child link="link_feed1"/>
     <origin xyz="-1.25 1.5 0" rpy="1.57079632679 0 0"/>
   </joint>
@@ -61,7 +68,7 @@
   <joint name="joint_feed2_to_base_link" type="fixed">
     <parent link="world"/>
     <child link="link_feed2"/>
-    <origin xyz="3.2 0.075 0" rpy="1.57079632679 -1.57079632679 0"/>
+    <origin xyz="1.2 0.075 0" rpy="1.57079632679 -1.57079632679 0"/>
   </joint>
 
 </robot>
