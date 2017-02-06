@@ -76,7 +76,7 @@
   </gazebo>
 
   <gazebo reference="wrist_3_link">
-    <selfCollide>true</selfCollide>
+    <selfCollide>false</selfCollide>
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
     <kd>1</kd>
@@ -84,7 +84,7 @@
   </gazebo>
 
   <gazebo reference="ee_link">
-    <selfCollide>true</selfCollide>
+    <selfCollide>false</selfCollide>
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
     <kd>1</kd>
@@ -92,7 +92,7 @@
   </gazebo>
 
   <gazebo reference="forcesensor_link">
-    <selfCollide>true</selfCollide>
+    <selfCollide>false</selfCollide>
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
     <kd>1</kd>
@@ -113,7 +113,7 @@
   </gazebo>
 
   <gazebo reference="bolt_link">
-    <selfCollide>true</selfCollide>
+    <selfCollide>false</selfCollide>
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
     <kd>1</kd>
