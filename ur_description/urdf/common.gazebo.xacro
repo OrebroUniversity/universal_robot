@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
 
   <gazebo>
     <plugin name="ros_control" filename="libgazebo_ros_control.so">
       <!--robotNamespace>/</robotNamespace-->
       <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
     </plugin>
+    <shadows>false</shadows>
 
 <!--
     <plugin name="gazebo_ros_power_monitor_controller" filename="libgazebo_ros_power_monitor.so">
@@ -21,6 +25,99 @@
       <chargeVoltage>16.41</chargeVoltage>
     </plugin>
 -->
+  </gazebo>
+
+  <gazebo reference="world">
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="link_feed1">
+    <selfCollide>true</selfCollide>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kd>1</kd>
+    <kp>7000</kp>
+  </gazebo>
+
+  <gazebo reference="link_feed2">
+    <selfCollide>true</selfCollide>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kd>1</kd>
+    <kp>7000</kp>
+  </gazebo>
+
+  <gazebo reference="ur10_base_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="shoulder_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="upper_arm_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="forearm_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="wrist_1_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="wrist_2_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <gazebo reference="wrist_3_link">
+    <selfCollide>false</selfCollide>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kd>1</kd>
+    <kp>7000</kp>
+  </gazebo>
+
+  <gazebo reference="ee_link">
+    <selfCollide>false</selfCollide>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kd>1</kd>
+    <kp>7000</kp>
+  </gazebo>
+
+  <gazebo reference="forcesensor_link">
+    <selfCollide>false</selfCollide>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kd>1</kd>
+    <kp>7000</kp>
+    <sensor name="forcesensor_link_contact_sensor" type="contact">
+      <always_on>1</always_on>
+      <update_rate>1000</update_rate>
+      <contact>
+        <collision>forcesensor_link_collision</collision>
+        <topic>/contact_forces</topic>
+      </contact>
+      <plugin name="forcesensor_link_bumper" filename="libreload_contact_sensor_plugin.so">
+        <robotNamespace>/</robotNamespace>
+        <bumperTopicName>/impedance_controller/contact_forces</bumperTopicName>
+        <frameName>forcesensor_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="bolt_link">
+    <selfCollide>false</selfCollide>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kd>1</kd>
+    <kp>7000</kp>
   </gazebo>
 
 </robot>

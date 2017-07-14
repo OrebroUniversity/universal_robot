@@ -63,7 +63,7 @@
   </xacro:macro>
 
 
-  <xacro:macro name="ur10_robot" params="prefix joint_limited
+  <xacro:macro name="ur10_robot" params="prefix joint_limited hardware_interface
 		 shoulder_pan_lower_limit:=${-pi}    shoulder_pan_upper_limit:=${pi}
 		 shoulder_lift_lower_limit:=${-pi}    shoulder_lift_upper_limit:=${pi}
 		 elbow_joint_lower_limit:=${-pi}    elbow_joint_upper_limit:=${pi}
@@ -71,7 +71,38 @@
 		 wrist_2_lower_limit:=${-pi}    wrist_2_upper_limit:=${pi}
 		 wrist_3_lower_limit:=${-pi}    wrist_3_upper_limit:=${pi}">
 
-    <link name="${prefix}base_link" >
+    <link name="${prefix}pedistal_link">
+      <visual>
+        <geometry>
+          <box size="0.15 0.15 0.90" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+        <origin xyz="0 0 0.0" rpy="0 0 0" />
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.15 0.15 0.90" />
+        </geometry>
+        <origin xyz="0 0 0.0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <mass value="1" />
+        <origin xyz="0 0 0.0" rpy="0 0 0" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                           iyy="1.0" iyz="0.0"
+                                     izz="1.0" />
+      </inertial>
+    </link>
+
+    <joint name="pedistal_joint" type="fixed">
+      <parent link="${prefix}pedistal_link" />
+      <child link = "${prefix}ur10_base_link" />
+      <origin xyz="0.0 0.0 ${0.45}" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link name="${prefix}ur10_base_link" >
       <visual>
         <geometry>
           <mesh filename="package://ur_description/meshes/ur10/visual/base.dae"/>
@@ -91,7 +122,7 @@
     </link>
 
     <joint name="${prefix}shoulder_pan_joint" type="revolute">
-      <parent link="${prefix}base_link" />
+      <parent link="${prefix}ur10_base_link" />
       <child link = "${prefix}shoulder_link" />
       <origin xyz="0.0 0.0 ${shoulder_height}" rpy="0.0 0.0 0.0" />
       <axis xyz="0 0 1" />
@@ -126,7 +157,7 @@
     <joint name="${prefix}shoulder_lift_joint" type="revolute">
       <parent link="${prefix}shoulder_link" />
       <child link = "${prefix}upper_arm_link" />
-      <origin xyz="0.0 ${shoulder_offset} 0.0" rpy="0.0 ${pi / 2.0} 0.0" />
+      <origin xyz="0.0 ${shoulder_offset} 0.0" rpy="0.0 ${pi / 2.0 * 0.5} 0.0" />
       <axis xyz="0 1 0" />
       <xacro:unless value="${joint_limited}">
         <limit lower="${-2.0 * pi}" upper="${2.0 * pi}" effort="330.0" velocity="2.16"/>
@@ -159,7 +190,7 @@
     <joint name="${prefix}elbow_joint" type="revolute">
       <parent link="${prefix}upper_arm_link" />
       <child link = "${prefix}forearm_link" />
-      <origin xyz="0.0 ${elbow_offset} ${upper_arm_length}" rpy="0.0 0.0 0.0" />
+      <origin xyz="0.0 ${elbow_offset} ${upper_arm_length}" rpy="0.0 ${pi / 2.0 * 0.5} 0.0" />
       <axis xyz="0 1 0" />
       <xacro:unless value="${joint_limited}">
         <limit lower="${-2.0 * pi}" upper="${2.0 * pi}" effort="150.0" velocity="3.15"/>
@@ -303,7 +334,61 @@
       </collision>
     </link>
 
-    <xacro:ur_arm_transmission prefix="${prefix}" />
+    <joint name="${prefix}forcesensor_fixed_joint" type="fixed">
+      <parent link="${prefix}ee_link" />
+      <child link = "${prefix}forcesensor_link" />
+      <origin xyz="0.0175 0.0 0.0" rpy="0.0 ${pi/2} 0.0" />
+    </joint>
+
+    <link name="${prefix}forcesensor_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.035" length="0.035" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+        <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.0175" length="0.07" />
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      </collision>
+      <xacro:cylinder_inertial radius="0.0175" length="0.07" mass="0.200">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <joint name="${prefix}bolt_fixed_joint" type="fixed">
+      <parent link="${prefix}forcesensor_link" />
+      <child link = "${prefix}bolt_link" />
+      <origin xyz="0 0 ${0.0075+0.0175}" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <link name="${prefix}bolt_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.0075" length="2.0" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 0"/>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.0075" length="2.0" />
+        </geometry>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 0"/>
+      </collision>
+      <xacro:cylinder_inertial radius="0.0075" length="2.0" mass="0.200">
+        <origin xyz="0.0 0.0 0.0" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <xacro:ur_arm_transmission prefix="${prefix}" hardware_interface="${hardware_interface}" />
     <xacro:ur_arm_gazebo prefix="${prefix}" />
 
     <!-- ROS base_link to UR 'Base' Coordinates transform -->
